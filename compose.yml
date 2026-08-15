@@ -1,0 +1,48 @@
+services:
+
+  postgres:
+    image: postgres:18
+    container_name: etl-pg
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+  etl:
+    build:
+      context: .
+      dockerfile: Containerfile
+
+    container_name: etl-py
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    environment:
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_USER: ${POSTGRES_USER}
+      PG_DB: ${POSTGRES_DB}
+      DATABASE_URL: ${DATABASE_URL}
+
+    volumes:
+      - ./Latihan:/Latihan:z
+      - ./Dataset:/Dataset:Z
+
+volumes:
+  pgdata:

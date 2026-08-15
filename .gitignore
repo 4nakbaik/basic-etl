@@ -1,0 +1,10 @@
+Day1/
+Latihan/
+
+.env
+.env.*
+
+.venv/
+venv/
+env/
+
