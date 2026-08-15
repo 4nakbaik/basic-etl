@@ -22,4 +22,38 @@ def extract():
     return customers, products, orders
 
 def transform(customers, products, orders):
+    #standarisasi
+    customers['customer_name'] = customers['customer_name'].apply(
+        lambda x: re.sub(r'[^a-zA-Z\s]', '', x).strip().title()
+    )
+    #validasi kolom customer_name min 3 char
+    customers = customers[customers['customer_mame'].str.len() >= 3]
+    customers = customers.drop_duplicate(subset =['customer_id']) #hapus dupe
+
+    #validasi kolom base_price 
+    products = products[products['base_price'] > 0]
+    products = products.drop_duplicate(subset = ['product_id']) 
+
+    #validasi kolom status transaksi harus dalam kondisi "paid"
+    orders = orders[orders['status'] == 'paid']
+    #validasi kolom quantity dan price value tidak boleh < 0
+    orders = orders[orders('quantity') > 0 and orders('price') > 0]
+    orders = orders.drop_duplicate(subset = ['order_id'])
+
+    return customers, products, orders
+
+def load():
+    pass
+
+def main():
+    customers, products, orders = extract()
+    customers, products, orders = transform(customers, products, orders)
+    load()
+
+if __name__ == "__main__":
+    main()
+
+
+
+
 
