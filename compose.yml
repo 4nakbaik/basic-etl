@@ -41,7 +41,7 @@ services:
       DATABASE_URL: ${DATABASE_URL}
 
     volumes:
-      - ./Latihan:/Latihan:z
+      - ./ETL:/ETL:z
       - ./Dataset:/Dataset:Z
 
 volumes:

@@ -121,7 +121,7 @@ def load(data):
 
     except Exception as e:
         session.rollback()
-        print(f'Error: {e}')
+        print(f'Load Error: {e}')
         return False
 
     finally:
@@ -141,7 +141,7 @@ def main():
     if success:
         print('Load success')
     else:
-        print('Load error')
+        print('Load failed')
 
 
 if __name__ == "__main__":
