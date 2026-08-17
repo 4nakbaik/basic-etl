@@ -5,6 +5,7 @@ import pandas as pd
 from pathlib import Path
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
+from sqlalchemy.types import String, Integer, Float
 
 load_dotenv()
 
@@ -55,8 +56,17 @@ def load(customers, products, orders):
             conn.execute(text("DROP TABLE IF EXISTS dim_products CASCADE;"))
             conn.execute(text("DROP TABLE IF EXISTS dim_customers CASCADE;"))
 
-            customers.to_sql('dim_customers',con=conn, if_exists = 'replace', index = False)
-            products.to_sql('dim_products',con=conn, if_exists = 'replace', index = False)
+            customers.to_sql('dim_customers',con=conn, if_exists = 'replace', index = False,
+                dtype={
+                    'product_id: Integer',
+                    'product_name: String(150)',
+            })
+            products.to_sql('dim_products',con=conn, if_exists = 'replace', index = False,
+                dtype={
+                    'product_id: Integer',
+                    'product_name: String(150)',
+                    'base_price: Float'
+                })
             orders.to_sql('fact_orders',con=conn, if_exists = 'replace', index = False)
 
         #Set primary key & foreign key
