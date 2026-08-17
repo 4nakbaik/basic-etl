@@ -42,7 +42,7 @@ services:
 
     volumes:
       - ./ETL:/ETL:z
-      - ./Dataset:/Dataset:Z
+      - ./Dataset:/Dataset:z
 
 volumes:
   pgdata:

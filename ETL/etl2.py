@@ -5,7 +5,7 @@ import pandas as pd
 from pathlib import Path
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
-from sqlalchemy.types import String, Integer, Float
+from sqlalchemy.types import String, Integer, Float, Date
 
 load_dotenv()
 
@@ -58,16 +58,25 @@ def load(customers, products, orders):
 
             customers.to_sql('dim_customers',con=conn, if_exists = 'replace', index = False,
                 dtype={
-                    'product_id: Integer',
-                    'product_name: String(150)',
+                    'product_id': Integer(),
+                    'product_name': String(150)
             })
             products.to_sql('dim_products',con=conn, if_exists = 'replace', index = False,
                 dtype={
-                    'product_id: Integer',
-                    'product_name: String(150)',
-                    'base_price: Float'
+                    'product_id': Integer(),
+                    'product_name': String(150),
+                    'base_price': Float()
                 })
-            orders.to_sql('fact_orders',con=conn, if_exists = 'replace', index = False)
+            orders.to_sql('fact_orders',con=conn, if_exists = 'replace', index = False,
+                dtype={
+                    'order_id': Integer(),
+                    'order_date': Date(),
+                    'customer_id': Integer(),
+                    'product_id': Integer(),
+                    'quantity': Integer(),
+                    'total_price': Float(),
+                    'status': String(20)
+                })
 
         #Set primary key & foreign key
         with engine.begin() as conn:
