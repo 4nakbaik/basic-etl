@@ -6,4 +6,4 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "etl2.py"]
+CMD ["python", "etl3.py"]
